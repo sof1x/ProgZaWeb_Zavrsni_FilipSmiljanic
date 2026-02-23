@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block navbar %}{% endblock %}
+{% block content %}
+
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+
+    <div class="max-w-md w-full bg-white p-8 rounded-xl shadow">
+
+        <h1 class="text-2xl font-bold mb-6 text-center">
+            📝 Register
+        </h1>
+
+        {% if form.errors %}
+            <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                Please correct the errors below.
+            </div>
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-sm font-medium mb-1">
+                    Username
+                </label>
+                {{ form.username }}
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">
+                    Password
+                </label>
+                {{ form.password1 }}
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">
+                    Confirm Password
+                </label>
+                {{ form.password2 }}
+            </div>
+
+            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
+                Create account
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-600">
+            Already have an account?
+            <a href="{% url 'login' %}" class="text-blue-600 font-medium hover:underline">
+                Login
+            </a>
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

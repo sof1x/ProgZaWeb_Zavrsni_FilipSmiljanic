@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory System</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+{% block navbar %}
+<nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
+
+    <div class="flex gap-4">
+        <a href="/" class="font-bold">Dashboard</a>
+        <a href="/warehouses/">Warehouses</a>
+        <a href="/products/">Products</a>
+        <a href="/stock/">Stock</a>
+    </div>
+
+    <div class="flex gap-4 items-center">
+
+        {% if user.is_authenticated %}
+            <span class="text-sm font-medium">
+                👤 {{ user.username }}
+            </span>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-white">
+                    Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="font-medium">Login</a>
+            <a href="{% url 'main:register' %}" class="font-medium">Register</a>
+        {% endif %}
+
+    </div>
+
+</nav>
+{% endblock %}
+
+<div class="container mx-auto p-6">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

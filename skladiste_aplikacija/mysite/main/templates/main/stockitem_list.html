@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-7xl mx-auto py-10 px-4">
+
+    <h1 class="text-2xl font-bold mb-6">
+        Stock Overview
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <p class="text-sm text-gray-500">Total quantity</p>
+            <p class="text-3xl font-bold">{{ total_quantity }}</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <p class="text-sm text-gray-500">Total inventory value</p>
+            <p class="text-3xl font-bold">
+                {{ total_value_sum|floatformat:2 }}
+            </p>
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-xl shadow p-6 mb-6">
+
+        <form method="get" class="flex flex-col md:flex-row gap-4 md:items-end">
+
+            <div>
+                <label class="block text-sm font-medium mb-1">
+                    Search product
+                </label>
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ request.GET.q }}"
+                    placeholder="Product name..."
+                    class="w-64 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">
+                    Warehouse
+                </label>
+                <select
+                    name="warehouse"
+                    class="w-56 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                    <option value="">All warehouses</option>
+
+                    {% for w in warehouses %}
+                        <option value="{{ w.id }}"
+                            {% if request.GET.warehouse == w.id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ w.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <button
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                    Apply
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+
+        <table class="min-w-full">
+
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-600">Product</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-600">Warehouse</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-600">Quantity</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-600">Unit price</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-600">Total value</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y">
+
+                {% for item in items %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 font-medium">
+                        {{ item.product.name }}
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">
+                        {{ item.warehouse.name }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ item.quantity }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ item.product.price }}
+                    </td>
+                    <td class="px-6 py-4 font-semibold">
+                        {{ item.total_value|floatformat:2 }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                        No stock items found.
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
